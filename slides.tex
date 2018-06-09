@@ -1,0 +1,153 @@
+\documentclass{beamer}
+
+\usepackage{listings}
+
+% Make Beamer less ugly:
+\usefonttheme{serif}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{titlelike}{fg=black}
+\setbeamercolor{frametitles}{fg=black}
+\setbeamertemplate{itemize items}{\color{black}\textbullet}
+
+\frenchspacing
+
+\lstset{basicstyle=\small}
+\lstset{language=C}
+
+\begin{document}
+
+\title{Introduction to Nix \\ Purely Functional Package Management}
+\author{Travis Whitaker}
+\date{}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Package Management \textemdash The Stone Age}
+\begin{itemize}
+\item It's sometime in the late 1980's and you're sitting at a UNIX machine.
+\item Your buddy on USENET just sent you an FTP address for some cool new program.
+\item Download and extract the tarball on to your machine.
+\item Run the Makefile.
+\item Copy the binaries to \texttt{/bin}.
+\item Read the manual page and write a config file in \texttt{/etc}.
+\item Turns out the program was malware. Your machine needs to be serviced by AT\&T.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Package Management \textemdash Discovering Fire}
+\begin{itemize}
+\item It's 1995. Your Sun SPARC workstation runs Debian 0.9.
+\item Your buddy on IRC tells you about a cool new XFree86 widget.
+\item \texttt{apt-get install some-cool-widget}
+\item Aptitude downloads the package from a mirror for you.
+\item A flood of text from setup hooks and shell scripts whizzes by.
+\item There are new files in \texttt{/bin, /etc, /usr/bin, /usr/lib, /var ...}
+\item A few weeks later the widget stops working, so you re-install.
+\item \ldots but the setup hooks don't work the same way the second time.
+\item A year later most of your packages are broken, so you re-install Debian.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Package Management \textemdash Oooh, Shiny!}
+\begin{itemize}
+\item It's 2013. You're in an Ubuntu VM on a MacBook Pro.
+\item Your buddy on Facebook tells you about a cool new tool packaged on NPM.
+\item The NPM package actually needs another utility in Ruby, so you grab that Ruby Gem.
+\item That Ruby Gem needs some Python tool, so you grab that from PyPI.
+\item That Python code needs some Perl code, so you grab that from CPAN.
+\item That Perl code has some C dependencies, so you \texttt{apt-get install} those.
+\item You wonder if writing Java was really that bad after all\ldots
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Package Management \textemdash Beginnings of Reproducibility}
+\begin{itemize}
+\item It's 2016. You work at some hip startup, so everything runs in Docker containers.
+\item Your coworker on Slack tells you to try out this new web framework.
+\item You download and run the pre-built docker container. Everything \emph{just works}.
+\item You want to integrate your slick new app with the latest NoSQL database everyone on HackerNews is talking about.
+\item You download the pre-built binary in your Dockerfile.
+\item The new database complains about an incompatible \texttt{glibc}.
+\item You're not sure what that is, it's probably something only those Linux neckbeards care about.
+\item HackerNews has decided that database sucks, so you give up.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Development Problems with ``Traditional'' Package Managers}
+\begin{itemize}
+\item Builds are not reproducible.
+\item Imprecisely defined dependencies.
+\item Incompatible binaries and libraries can't be used simultaneously.
+\item Developer environments are not reproducible; ``it works on my machine!''
+\item Packaging and deployment are hard.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Deployment Problems with ``Traditional'' Package Managers}
+\begin{itemize}
+\item Upgrades aren't atomic and can't be easily undone.
+\item Adding or upgrading one package can often break others.
+\item It's exceedingly difficult to create and maintain identical environments across a fleet.
+\item Different programs use wildly different techniques and languages for configuration.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{How Nix Solves These Problems}
+\begin{itemize}
+\item One (pure, lazy, functional) language for defining and configuring packages.
+\item Each package, its build inputs, and its configuration are cryptographically hashed and immutable.
+\item Packages may only reference eachother by these hashes, so dependencies are guaranteed to be tracked precisely.
+\item Each package can be safely and transparently cached.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Nix Expression Language}
+\begin{itemize}
+\item Pure \textemdash no variables, no mutation, etc.
+\item Lazy \textemdash only expressions whose results are required are evaluated.
+\item Functional \textemdash functions are values.
+\item Dynamically typed.
+\item JSON-like syntax.
+\item Intended to be used for packaging and configuration; not general purpose.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Nixpkgs \textemdash Community Provided Package Set}
+\begin{itemize}
+\item Developed publicly on GitHub.
+\item Contains approximately 10000 packages.
+\item Built-in machinery for working with lots of existing package managers.
+\item Public infrastructure for building, testing, and caching packages.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{NixOS \textemdash Nix-based Linux Distribution}
+\begin{itemize}
+\item Developed publicly on GitHub.
+\item Uses Nix instead of Aptitude, Pacman, Yum, Portage, etc.
+\item All binaries, libraries, and configuration files built by Nix.
+\item Package repository provided by Nixpkgs.
+\item Atomic upgrades and rollbacks.
+\item Supports most desktop environments, window managers, etc.
+\item No mutable system state (except for user data, databases, logs, etc.)
+\item That means no \texttt{/bin, /etc, /usr, etc.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\Huge Let's Write a Nix Package!
+\end{center}
+\end{frame}
+
+\end{document}
